@@ -1,0 +1,267 @@
+{% extends 'layout.html' %}
+
+{% block cust_stylesheet %}
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="330855146118-3vhjm320p2b0hae8ovtvrh65jj3njkms.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+{% endblock %}
+
+{% block content %}
+<header class="container-fluid">
+  <nav class="navbar navbar-expand-md navbar-light fixed-top">
+    <div class="container-fluid">
+      <a href="#"></a>
+      <form class="form-inline navbar-nav ml-auto">
+        <div class="g-signin2 mr-2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <a href="#" class="btn btn-light btn-sm mr-1" onclick="signOut();">Sign out</a>
+        <!-- <button class="btn btn-light btn-sm mr-2" name="login" data-toggle="modal"  data-target="#profileModal">User Profile</button> -->
+        <button class="btn btn-light btn-sm" name="login">About Us</button>
+      </form>
+    </div>
+  </nav>
+</header>
+
+<div class="Main-jumbo">
+  <div class="container">
+    <div class="row" style="height:7rem"></div>
+    <div class="row justify-content-center">
+      <p class="display-3 text-center p-3">HealthAid</p><br>
+    </div>
+    <hr style="width:50%">
+    <div class="row justify-content-center mt-4">
+      <!-- <form class="form-inline my-2 my-lg-0 large-search"> -->
+      <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+      <input class="col-md-6 form-control location-area pl-4" type="search" placeholder="Enter your Location" id="autocomplete"
+        aria-label="Search">
+      <input class="col-md-3 form-control location-area pl-4" type="button" value="Use current location" id="getloc"
+        aria-label="Search" onclick="getLoc();">
+      <button class="col-md btn btn-light btn-outline-dark location-search" type="submit">Search</button>
+      <!-- </form> -->
+    </div>
+    <div class="row justify-content-center mt-4">
+      <label>Rate your pain:</label>
+    </div>
+    <div class="row justify-content-center mt-2 text-center">
+      <div class="slidecontainer justify-content-center">
+        <input class="slider" type="range" min="1" max="11" step="2" />
+      </div>
+    </div>
+    <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+          <input type="radio" name="options" id="sev1" autocomplete="off" checked>
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="sev2" autocomplete="off">
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="sev3" autocomplete="off"> Radio
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="sev4" autocomplete="off"> Radio
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="sev5" autocomplete="off"> Radio
+        </label>
+      </div> -->
+    <div class="row" style="height:8rem"></div>
+  </div>
+</div>
+<div class="container-fluid footer-strip mb-2" style="height:1rem">
+
+</div>
+
+<!--Display hospital info here-->
+<div class="container">
+  <div class="container">
+  <ul class="nav nav-tabs">
+    <button class="tablinks active" onclick="openCity(event, 'Overall')">Overall</button>
+    <button class="tablinks" onclick="openCity(event, 'Quality')">Quality</button>
+    <button class="tablinks" onclick="openCity(event, 'Time')">Time</button>
+    <button class="tablinks" onclick="openCity(event, 'Budget')">Budget</button>
+  </ul>
+
+  <div id="Overall" class="tabcontent">
+    <p>London is the capital city of England.</p>
+    <!--cards for 3 hospitals, so modals open or something idk-->
+    <!--example of cards-->
+    <div class="row">
+      <div class="col-md p-2">
+        <div class="card">
+          <img class="card-img-bottom" src="img_avatar6.png" alt="Card image" style="width:100%">
+          <div class="card-body">
+            <h4 class="card-title">Jane Doe</h4>
+            <p class="card-text">Some example text some example text. Jane Doe is an architect and engineer</p>
+            <a href="#" class="btn btn-primary">See Profile</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md p-2">
+        <div class="card">
+          <img class="card-img-bottom" src="img_avatar6.png" alt="Card image" style="width:100%">
+          <div class="card-body">
+            <h4 class="card-title">Jane Doe</h4>
+            <p class="card-text">Some example text some example text. Jane Doe is an architect and engineer</p>
+            <a href="#" class="btn btn-primary">See Profile</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md p-2">
+        <div class="card">
+          <img class="card-img-bottom" src="img_avatar6.png" alt="Card image" style="width:100%">
+          <div class="card-body">
+            <h4 class="card-title">Jane Doe</h4>
+            <p class="card-text">Some example text some example text. Jane Doe is an architect and engineer</p>
+            <a href="#" class="btn btn-primary">See Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="Time" class="tabcontent">
+    <p>Other content</p>
+  </div>
+  <div id="Quality" class="tabcontent">
+    <p>Even more content</p>
+  </div>
+  <div id="Budget" class="tabcontent">
+    <p>London is the capital city of England.</p>
+  </div>
+</div>
+<div class="container">
+  <div class="map col-12" id="map" style="width:100%; height:100%;"></div>
+</div>
+</div>
+
+
+<div class="container-fluid footer-strip">
+</div>
+
+{% endblock content %}
+{% block cust_scripts %}
+
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdVpvGO8uGeUlz7o7qQBrMqyWb0P6JkIM&libraries=places&callback=initAutocomplete" async defer></script>
+<script>
+  var placeSearch, autocomplete, geocoder;
+  function initAutocomplete() {
+  geocoder = new google.maps.Geocoder();
+  autocomplete = new google.maps.places.Autocomplete(
+    (document.getElementById('autocomplete')), {
+      types: ['geocode']
+    });
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+function codeAddress(address) {
+  geocoder.geocode({
+    'address': address
+  }, function(results, status) {
+    if (status == 'OK') {
+      // This is the lat and lng results[0].geometry.location
+      alert(results[0].geometry.location);
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+function fillInAddress() {
+  var place = autocomplete.getPlace();
+  codeAddress(document.getElementById('autocomplete').value);
+}
+
+  /*get current location*/
+  function getLoc(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(displayLocation, showError);
+    } else {
+      alert("Couldn't get your location");
+    }
+  }
+  function displayLocation(position){
+    lat = position.coords.latitude;
+    lng = position.coords.longitude;
+    console.log('lat'+lat+' lng'+lng);
+  }
+  function showError(error){
+    console.log(error);
+  }
+  
+  /*get signin data*/
+  function onSignIn(googleUser) {
+    // Useful data for your client-side scripts:
+    var profile = googleUser.getBasicProfile();
+    console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+    console.log('Full Name: ' + profile.getName());
+    console.log('Given Name: ' + profile.getGivenName());
+    console.log('Family Name: ' + profile.getFamilyName());
+    console.log("Image URL: " + profile.getImageUrl());
+    console.log("Email: " + profile.getEmail());
+
+    // The ID token you need to pass to your backend:
+    var id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
+    document.getElementsByClassName('g-signin2').style.display = 'none';
+
+  }
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+    document.getElementsByClassName('g-signin2').style.display = 'block';
+  }
+
+
+  /*print maps*/
+  function initMap() {
+  var pointA = new google.maps.LatLng(19.0728088, 72.8978032),
+    pointB = new google.maps.LatLng(19.0471436, 72.9111564),
+    myOptions = {
+      zoom: 7,
+      center: pointA
+    },
+    map = new google.maps.Map(document.getElementById('map-canvas'), myOptions),
+    // Instantiate a directions service.
+    directionsService = new google.maps.DirectionsService,
+    directionsDisplay = new google.maps.DirectionsRenderer({
+      map: map
+    }),
+    markerA = new google.maps.Marker({
+      position: pointA,
+      title: "point A",
+      label: "A",
+      map: map
+    }),
+    markerB = new google.maps.Marker({
+      position: pointB,
+      title: "point B",
+      label: "B",
+      map: map
+    });
+
+  // get route from A to B
+  calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB);
+
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB) {
+  directionsService.route({
+    origin: pointA,
+    destination: pointB,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+initMap();
+</script>
+{% endblock %}

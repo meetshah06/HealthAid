@@ -1,0 +1,3 @@
+Future Implementation :- 
+- Type of doctor. Add various categories like skin, hair, dental etc.
+- get medicines from other hospitals if not available right now in one

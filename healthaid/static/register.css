@@ -1,0 +1,16 @@
+.main-body{
+    background-image:url('/Images/RegisterHospi.png');
+    /*background-color:linear-gradient(166deg, rgba(35,136,190,1) , rgba(42, 110, 85,1));*/
+    background-color: rgba(0,0,0,0.45); 
+    background-blend-mode: multiply;
+    /*background-image:url('/static/pictures/main-img.jpg');*/
+    /*background-color: grey;*/
+    background-size: cover;
+    height:100%;
+    width:100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /*font-family: 'Montserrat', sans-serif;*/
+    color:white;
+}
