@@ -1,7 +1,8 @@
 .Main-jumbo{
-	background-image:url('/Images/Jumbo.png');
+    background:url("https://github.com/meetshah06/HealthAid/blob/master/blossom-blossoms-blue-72161.jpg?raw=true");
+    /* background:url("/Images/Jumbo.png"); */
     /*background-color:linear-gradient(166deg, rgba(35,136,190,1) , rgba(42, 110, 85,1));*/
-    background-color: rgba(0,0,0,0.45); 
+    background-color: rgba(0,0,0,0.4);
     background-blend-mode: multiply;
     /*background-image:url('/static/pictures/main-img.jpg');*/
     /*background-color: grey;*/
@@ -54,13 +55,13 @@ height: 10px; /* Specified height */
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4CAF50; /* Green background */
+  background: rgba(42,218,255); /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4CAF50; /* Green background */
+  background: rgba(42,218,255); /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 .slidecontainer {
@@ -68,7 +69,7 @@ height: 10px; /* Specified height */
 }
 
 .footer-strip{
-	background-color: rgba(60,169,228);
+	background-color: rgba(42,218,255);
 }
 
 .tab {
@@ -107,3 +108,16 @@ height: 10px; /* Specified height */
   border-top: none;
 }
 
+.location-area,.location-search{
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+#googleSignout{
+  display:none !important;
+}
+
+#that-bar{
+  display:none;
+}

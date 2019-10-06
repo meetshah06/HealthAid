@@ -11,3 +11,8 @@ function openCity(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+function showTabs(){
+  console.log("here")
+  document.getElementById('that-bar').style.display = 'block';
+}

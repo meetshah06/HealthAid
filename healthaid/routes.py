@@ -1,13 +1,14 @@
-from healthaid import app
+from healthaid import app,db
 import requests, json
-from flask import flash, render_template, request, session, url_for
+from flask import flash, render_template, request, session, url_for, redirect
 from healthaid.models import User, Hospital, Algo
 from healthaid.forms import HospitalRegistrationForm
 api_key= 'AIzaSyCdVpvGO8uGeUlz7o7qQBrMqyWb0P6JkIM'
 
 
-@app.route('/hospital/<source>/<severity>',methods = ['GET'])
-def getHospitalDetails(source,severity):
+def getHospitalDetails(source, severity):
+    import copy
+    severity=int(severity)
     url='https://maps.googleapis.com/maps/api/geocode/json?address=origins='+source+'&key='+api_key
     lat,lng = 0.0,0.0
     while True:
@@ -21,7 +22,21 @@ def getHospitalDetails(source,severity):
                 data=getNearbyData(lat,lng,severity)
                 # print(data)
             break
-    return render_template('index.html', data=data,source=source, source_lat=lat, source_long=lng)
+    #overall
+    #quality
+    #time
+    #budget
+    d0=copy.deepcopy(data)
+    d1=copy.deepcopy(data)
+    d2=copy.deepcopy(data)
+    d3=copy.deepcopy(data)
+    d0.sort(key=lambda x:x[0],reverse=True)
+    d1.sort(key=lambda x:x[6],reverse=True)
+    d2.sort(key=lambda x:x[10])
+    d3.sort(key=lambda x:x[11])
+    # print(d0[0],d1[0],d2[0],d3[0])
+    return [d0,d1,d2,d3,source,lat,lng]
+    #return render_template('index.html', data=json.dumps(data),source=source, source_lat=lat, source_long=lng)
     
 
 def getpercentage(place_id,budget, rating, duration, maxduration, severitylevel,
@@ -50,13 +65,13 @@ def getpercentage(place_id,budget, rating, duration, maxduration, severitylevel,
     nurse_value = no_of_nurses/(0.4*no_of_beds)
     if nurse_value > 1:
         nurse_value = 1
-    equipment_value = no_of_equipments/(1.5*no_of_equipments)
+    equipment_value = no_of_equipments/(1.5*no_of_beds)
     if equipment_value > 1:
         equipment_value = 1
     quality_value = quality_factor*(0.6*doctor_value + 0.25*nurse_value + 0.15*equipment_value)
-
-    return [budget_value + duration_value + (rating_value+quality_value)/2,place_id,info.name,
-                    info.address,info.lat,info.longi,info.rating,info.no_of_users,info.vacancy,info.total_beds,duration,budget]        
+    hospital=Hospital.query.filter_by(place_id=place_id).first()
+    return [budget_value + duration_value + (rating_value+quality_value)/2,place_id,hospital.name,
+                    hospital.address,hospital.lat,hospital.longi,hospital.rating,hospital.no_of_users,hospital.vacancy,hospital.total_beds,duration,budget]        
 
 
 def getNearbyData(lat,lng,severity):
@@ -94,12 +109,16 @@ def getNearbyData(lat,lng,severity):
                             equips = hospital.no_of_equipment
                             duration = b['rows'][0]['elements'][0]['duration_in_traffic']['value']
                             data.append([i['place_id'],i['name'],hospital.vacancy,sever_bud,rating,duration,severitylevel,doctors,nurses,equips,hospital.total_beds])
-                else:
-                    print(i)
-        maxduration = max([i[5] for i in data])
+                # else:
+                #     # print(i)
+        try:
+            maxduration = max([i[5] for i in data])
+        except:
+            pass
         for i in data:
             percentages.append(getpercentage(i[0],i[3],i[4],i[5],maxduration,i[6],i[7],i[8],i[9],i[10]))
-        print(percentages)
+        # print(percentages)
+        return percentages
                     
 
 
@@ -116,16 +135,42 @@ def checkVacancy(place_id):
     else:
         return False
 '''
-
-@app.route('/')
+@app.route('/',methods=['GET','POST'])
 @app.route('/home',methods=['GET','POST'])
 def home():
+    if request.method=="POST":
+        print(request.form)
+        print("type="+str(request.form['severity']))
+        x=getHospitalDetails(request.form['search'],request.form['severity'])
+        print(type(x[5]))
+        print(type(x[6]))
+        data = {
+            'd0':list(x[0][:min(3,len(x[0]))]),
+            'd1':list(x[1][:min(3,len(x[1]))]),
+            'd2':list(x[2][:min(3,len(x[2]))]),
+            'd3':list(x[3][:min(3,len(x[3]))]),
+            'source':x[4],
+            'lat':str(x[5]),
+            'lng':str(x[6])
+        }
+        return render_template('index.html',data=data)
+  
     return render_template('index.html')
 
 
-# @app.route('/RegisterHospi',methods=['GET','POST'])
-# def RegisterHospi():
-#     return render_template('register_hospi.html')
+@app.route('/updateusers',methods=['GET'])
+def updateUsers():
+    id=request.args.get('id')
+    uname=request.args.get('name')
+    email=request.args.get('email')
+    img=request.args.get('image')
+    if not User.query.filter_by(id=id).first():
+        u=User(id=id,username=uname,email=email,image_file=img)
+        db.session.add(u)
+        db.session.commit()
+        print ('users updated')
+        return 'success'
+
 
 @app.route("/RegisterHospi", methods=['GET', 'POST'])
 def registerHospi():
@@ -169,6 +214,7 @@ def registerHospi():
         
             return redirect(url_for('home'))
     return render_template('register_hospi.html' ,title='Register', form=form)
+
 
 @app.route('/HospiProfile/<hid>')
 def trial(hid):

@@ -1,0 +1,20 @@
+#main-bar{
+    background:url("https://github.com/meetshah06/HealthAid/blob/master/architecture-blue-blur-240572.jpg?raw=true");
+    /* background:url("/Images/Jumbo.png"); */
+    /*background-color:linear-gradient(166deg, rgba(35,136,190,1) , rgba(42, 110, 85,1));*/
+    background-color: rgba(0,0,0,0.4);
+    background-blend-mode: multiply;
+    /*background-image:url('/static/pictures/main-img.jpg');*/
+    /*background-color: grey;*/
+    background-size: cover;
+    height:90%;
+    width:100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /*font-family: 'Montserrat', sans-serif;*/
+    color:white;
+}
+#main-form{
+    background-color: rgba(0,0,0,0.5)
+}

@@ -1,12 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block cust_stylesheet %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='Hospiprofile.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid" id="main-bar">
 <div class="container">
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6 m-4 pl-5 pr-5" id="main-form">
     <form method="POST" action="" class="form">
       {{ form.hidden_tag() }}
       <fieldset class="form-group">
@@ -202,6 +204,7 @@
     </form>
   </div>
   </div>
+</div>
 </div>
 {% endblock content %}
 
