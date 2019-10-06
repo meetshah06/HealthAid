@@ -118,6 +118,38 @@ height: 10px; /* Specified height */
   display:none !important;
 }
 
-#that-bar{
+/* #that-bar{
   display:none;
+} */
+
+.slider1:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+.slider1 {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 60%; /* Full-width */
+height: 10px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+.slider1::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: rgba(42,218,255); /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+.slider1::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: rgba(42,218,255); /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
 }

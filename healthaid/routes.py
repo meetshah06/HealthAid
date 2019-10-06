@@ -1,5 +1,6 @@
 from healthaid import app,db
 import requests, json
+import urllib.request as urllib2
 from flask import flash, render_template, request, session, url_for, redirect
 from healthaid.models import User, Hospital, Algo
 from healthaid.forms import HospitalRegistrationForm
@@ -141,7 +142,14 @@ def home():
     if request.method=="POST":
         print(request.form)
         print("type="+str(request.form['severity']))
-        x=getHospitalDetails(request.form['search'],request.form['severity'])
+        if request.form['search']!= '':
+            x=getHospitalDetails(request.form['search'],request.form['severity'])
+        else:
+            lat = request.args.get('lat')
+            lng = request.args.get('lng')
+            severity = request.args.get('severity')
+            address = json.loads(urllib2.urlopen('https://maps.googleapis.com/maps/api/geocode/json?latlng='+str(lat)+','+str(lng)+'&key='+api_key).read())['results'][0]['formatted_address']
+            x=getHospitalDetails(address,request.form['severity'])
         print(type(x[5]))
         print(type(x[6]))
         data = {
@@ -211,12 +219,11 @@ def registerHospi():
                     db.session.commit()#what happens on error.
                 except Exception as e:
                     print("error occured:",e)
-        
             return redirect(url_for('home'))
     return render_template('register_hospi.html' ,title='Register', form=form)
 
 
-@app.route('/HospiProfile/<hid>')
+@app.route('/HospiProfile/<hid>',methods=["POST","GET"])
 def trial(hid):
     obj=Hospital.query.filter_by(place_id=hid).first()
     form = HospitalRegistrationForm()
@@ -240,5 +247,24 @@ def trial(hid):
             db.session.commit()
         except Exception as e:
             print("error occured:",e)
+        return render_template('HospiProfile.html',Hospital=obj,form=form)
     else:
         return render_template('HospiProfile.html',Hospital=obj,form=form)
+
+@app.route('/trial2')
+def trial2():
+    return render_template('userreview.html')
+@app.route('/feedback')
+def feedback():
+    if request.method =="POST":
+        quality = request.POST['Quality']
+        budget = request.POST['Budget']
+        severity =request.POST['Severity']
+        algo = Algo.query.filter_by(level=severity)
+        algo.quality = algo.quality +(quality-3)*0.01
+        algo.rating = algo.quality
+        algo.budget = algo.budget + (budget-3)*0.01
+        algo.duration = 1-algo.budget-algo.quality
+        print("tp")
+        db.session.commit()
+        return redirect('home')

@@ -12,7 +12,19 @@ function openCity(evt, cityName) {
   evt.currentTarget.className += " active";
 }
 
-function showTabs(){
-  console.log("here")
-  document.getElementById('that-bar').style.display = 'block';
+// function showTabs(){
+//   console.log("here")
+//   document.getElementById('that-bar').style.display = 'block';
+// }
+
+var i = 0;
+var txt = "Suggestions based on Quality, Budget, Time and SO much more!"; /* The text */
+var speed = 50; /* The speed/duration of the effect in milliseconds */
+
+function typeWriter() {
+  if (i < txt.length) {
+    document.getElementById("typingText").innerHTML += txt.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  }
 }
